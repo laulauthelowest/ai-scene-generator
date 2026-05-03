@@ -18,26 +18,23 @@ Hooks.once("ready", () => {
 });
 
 // Add button to Scene Directory header
+// Foundry V13+ passes a plain HTMLElement; V12 and below pass a jQuery object.
 Hooks.on("renderSceneDirectory", (app, html) => {
   if (!game.user.isGM) return;
 
-  const button = $(`
-    <button class="ai-scene-gen-btn" title="${game.i18n.localize("AISCENEGEN.OpenDialog")}">
-      <i class="fas fa-wand-magic-sparkles"></i>
-      ${game.i18n.localize("AISCENEGEN.ButtonLabel")}
-    </button>
-  `);
+  // Normalise to a plain DOM element
+  const root = html instanceof HTMLElement ? html : html[0];
 
-  button.on("click", () => {
-    new AISceneGeneratorDialog().render(true);
-  });
+  const button = document.createElement("button");
+  button.className = "ai-scene-gen-btn";
+  button.title = game.i18n.localize("AISCENEGEN.OpenDialog");
+  button.innerHTML = `<i class="fas fa-wand-magic-sparkles"></i> ${game.i18n.localize("AISCENEGEN.ButtonLabel")}`;
+  button.addEventListener("click", () => new AISceneGeneratorDialog().render(true));
 
-  // Insert button into the directory header actions
-  const headerActions = html.find(".header-actions");
-  if (headerActions.length) {
-    headerActions.append(button);
-  } else {
-    // Fallback: prepend to the directory content
-    html.find(".directory-header").append(button);
-  }
+  const target =
+    root.querySelector(".header-actions") ??
+    root.querySelector(".directory-header") ??
+    root;
+
+  target.appendChild(button);
 });
