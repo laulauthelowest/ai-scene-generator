@@ -153,12 +153,20 @@ export class AISceneGeneratorDialog extends Application {
       this._q(".scene-name-input").value.trim() ||
       game.i18n.localize("AISCENEGEN.DefaultSceneName");
 
+    // Filename = sanitized scene name + timestamp for uniqueness
+    const safeName = sceneName
+      .replace(/[^a-zA-Z0-9äöüÄÖÜß_\- ]/g, "")
+      .trim()
+      .replace(/\s+/g, "_");
+    const filename = `${safeName}_${Date.now()}.png`;
+
     const btn = this._q(".btn-create-scene");
     btn.disabled = true;
     btn.textContent = game.i18n.localize("AISCENEGEN.Status.CreatingScene");
 
     try {
-      const imagePath = await this._uploadImage(this._previewUrl, this._pendingFilename);
+      const imagePath = await this._uploadImage(this._previewUrl, filename);
+      console.log(`${MODULE_ID} | Uploaded image to: ${imagePath}`);
       await this._createScene(sceneName, imagePath);
       ui.notifications.info(
         game.i18n.format("AISCENEGEN.Status.SceneCreated", { name: sceneName })
@@ -188,18 +196,31 @@ export class AISceneGeneratorDialog extends Application {
 
     const uploadResult = await FilePicker.upload("data", folder, file, {});
     if (!uploadResult?.path) throw new Error("Upload failed – no path returned.");
+
+    // Foundry sometimes returns a relative path like "ai-generated-scenes/foo.png"
+    // We need to ensure it's usable as a scene background src.
     return uploadResult.path;
   }
 
   async _createScene(name, backgroundPath) {
+    console.log(`${MODULE_ID} | Creating scene "${name}" with background: ${backgroundPath}`);
+
     const scene = await Scene.create({
       name,
+      // Try both the nested and flat background format for compatibility
       background: { src: backgroundPath },
+      foreground: null,
       width: 1920,
       height: 1080,
       grid: { type: 1, size: 100 },
       padding: 0,
     });
+
+    // Explicitly update the background after creation as a fallback
+    if (!scene.background?.src) {
+      await scene.update({ "background.src": backgroundPath });
+    }
+
     scene.sheet.render(true);
     return scene;
   }
