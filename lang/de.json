@@ -1,0 +1,49 @@
+{
+  "AISCENEGEN.DialogTitle": "KI-Szenen-Generator",
+  "AISCENEGEN.ButtonLabel": "KI-Szene",
+  "AISCENEGEN.OpenDialog": "KI-Szenen-Generator öffnen",
+
+  "AISCENEGEN.PromptLabel": "Bild-Prompt",
+  "AISCENEGEN.PromptPlaceholder": "Beschreibe die Szene, z.B. 'Ein dunkler Kerker mit leuchtenden Runen in Steinwänden, Fackelschein, neblige Atmosphäre'",
+  "AISCENEGEN.StyleLabel": "Kunststil",
+  "AISCENEGEN.SceneNameLabel": "Szenenname",
+  "AISCENEGEN.SceneNamePlaceholder": "Leer lassen für automatischen Namen",
+  "AISCENEGEN.PreviewLabel": "Vorschau",
+  "AISCENEGEN.FullPromptLabel": "Vollständiger Prompt an die API",
+
+  "AISCENEGEN.Generate": "Bild generieren",
+  "AISCENEGEN.Regenerate": "Neu generieren",
+  "AISCENEGEN.CreateScene": "Szene erstellen",
+  "AISCENEGEN.DefaultSceneName": "KI-generierte Szene",
+
+  "AISCENEGEN.Style.None": "Kein Stil",
+  "AISCENEGEN.Style.DnDFantasy": "D&D Fantasy",
+  "AISCENEGEN.Style.Comic": "Comic",
+  "AISCENEGEN.Style.Realistic": "Realistisch",
+  "AISCENEGEN.Style.VideoGame": "Computerspiel",
+  "AISCENEGEN.Style.Artistic": "Künstlerisch",
+  "AISCENEGEN.Style.DarkHorror": "Dark Horror",
+  "AISCENEGEN.Style.Watercolor": "Aquarell",
+  "AISCENEGEN.Style.SciFi": "Sci-Fi",
+
+  "AISCENEGEN.Status.Generating": "Bild wird generiert…",
+  "AISCENEGEN.Status.Done": "Bild fertig!",
+  "AISCENEGEN.Status.CreatingScene": "Szene wird erstellt…",
+  "AISCENEGEN.Status.SceneCreated": "Szene '{name}' erstellt!",
+
+  "AISCENEGEN.Error.NoApiKey": "Kein API-Schlüssel konfiguriert. Bitte in den Moduleinstellungen eintragen.",
+  "AISCENEGEN.Error.EmptyPrompt": "Bitte vor der Generierung einen Prompt eingeben.",
+  "AISCENEGEN.Error.GenerationFailed": "Bildgenerierung fehlgeschlagen",
+  "AISCENEGEN.Error.SceneFailed": "Szenenerstellung fehlgeschlagen",
+
+  "AISCENEGEN.Settings.ApiProvider": "Bild-API-Anbieter",
+  "AISCENEGEN.Settings.ApiProviderHint": "Wähle, welchen KI-Bildgenerierungsdienst du verwenden möchtest.",
+  "AISCENEGEN.Settings.ApiKey": "API-Schlüssel",
+  "AISCENEGEN.Settings.ApiKeyHint": "Dein geheimer API-Schlüssel für den gewählten Anbieter.",
+  "AISCENEGEN.Settings.ReplicateModel": "Replicate-Modell",
+  "AISCENEGEN.Settings.ReplicateModelHint": "Replicate-Modell-Pfad, z.B. black-forest-labs/flux-schnell",
+  "AISCENEGEN.Settings.ImageSize": "Bildgröße",
+  "AISCENEGEN.Settings.ImageSizeHint": "Auflösung des generierten Bildes (nur DALL-E 3).",
+  "AISCENEGEN.Settings.UploadFolder": "Upload-Ordner",
+  "AISCENEGEN.Settings.UploadFolderHint": "Ordner in deinen Foundry-Benutzerdaten, in dem generierte Bilder gespeichert werden."
+}

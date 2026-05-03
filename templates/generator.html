@@ -1,0 +1,101 @@
+{{!-- AI Scene Generator Dialog Template --}}
+<div class="asg-container">
+
+  {{#unless hasApiKey}}
+  <div class="asg-warning">
+    <i class="fas fa-triangle-exclamation"></i>
+    <span>No API key set. <a id="asg-open-settings" href="#">Open Settings</a></span>
+  </div>
+  {{/unless}}
+
+  {{!-- Scene Name --}}
+  <div class="asg-field">
+    <label for="asg-scene-name">
+      <i class="fas fa-map"></i> Scene Name
+    </label>
+    <input
+      type="text"
+      id="asg-scene-name"
+      placeholder="e.g. Dark Forest Clearing"
+      maxlength="80"
+    />
+  </div>
+
+  {{!-- Prompt --}}
+  <div class="asg-field">
+    <label for="asg-prompt">
+      <i class="fas fa-pen-nib"></i> Image Prompt
+      <span id="asg-char-count" class="char-count">0/1000</span>
+    </label>
+    <textarea
+      id="asg-prompt"
+      rows="4"
+      maxlength="1000"
+      placeholder="Describe the scene... e.g. 'A misty ancient dungeon with glowing runes, stone pillars, and mysterious shadows'"
+    ></textarea>
+  </div>
+
+  {{!-- Style Selection --}}
+  <div class="asg-field">
+    <label><i class="fas fa-palette"></i> Style Preset</label>
+    <select id="asg-style-select" class="asg-style-select-hidden">
+      {{#each styles}}
+      <option value="{{@key}}" {{#if (eq @key ../defaultStyle)}}selected{{/if}}>
+        {{this.label}}
+      </option>
+      {{/each}}
+    </select>
+    <div class="asg-style-grid">
+      <div class="asg-style-card {{#if (eq defaultStyle 'none')}}selected{{/if}}" data-style="none">
+        <i class="fas fa-xmark"></i>
+        <span>None</span>
+      </div>
+      <div class="asg-style-card {{#if (eq defaultStyle 'dnd_fantasy')}}selected{{/if}}" data-style="dnd_fantasy">
+        <i class="fas fa-dragon"></i>
+        <span>D&D Fantasy</span>
+      </div>
+      <div class="asg-style-card {{#if (eq defaultStyle 'comic')}}selected{{/if}}" data-style="comic">
+        <i class="fas fa-star"></i>
+        <span>Comic</span>
+      </div>
+      <div class="asg-style-card {{#if (eq defaultStyle 'realistic')}}selected{{/if}}" data-style="realistic">
+        <i class="fas fa-camera"></i>
+        <span>Realistic</span>
+      </div>
+      <div class="asg-style-card {{#if (eq defaultStyle 'videogame')}}selected{{/if}}" data-style="videogame">
+        <i class="fas fa-gamepad"></i>
+        <span>Video Game</span>
+      </div>
+      <div class="asg-style-card {{#if (eq defaultStyle 'artistic')}}selected{{/if}}" data-style="artistic">
+        <i class="fas fa-paint-brush"></i>
+        <span>Painterly</span>
+      </div>
+      <div class="asg-style-card {{#if (eq defaultStyle 'dark_gothic')}}selected{{/if}}" data-style="dark_gothic">
+        <i class="fas fa-skull"></i>
+        <span>Dark Gothic</span>
+      </div>
+      <div class="asg-style-card {{#if (eq defaultStyle 'watercolor')}}selected{{/if}}" data-style="watercolor">
+        <i class="fas fa-droplet"></i>
+        <span>Watercolor</span>
+      </div>
+    </div>
+  </div>
+
+  {{!-- Provider badge --}}
+  <div class="asg-provider-badge">
+    <i class="fas fa-robot"></i>
+    Using: <strong>{{#if (eq provider 'openai')}}OpenAI DALL·E 3{{else}}Stability AI{{/if}}</strong>
+  </div>
+
+  {{!-- Generate button --}}
+  <div class="asg-actions">
+    <button id="asg-generate-btn" class="asg-generate-btn">
+      <span id="asg-spinner" class="asg-spinner" style="display:none;">
+        <i class="fas fa-spinner fa-spin"></i>
+      </span>
+      <i class="fas fa-wand-magic-sparkles"></i>
+      <span class="btn-text">Generate Scene</span>
+    </button>
+  </div>
+
+</div>

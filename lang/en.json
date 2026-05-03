@@ -1,0 +1,49 @@
+{
+  "AISCENEGEN.DialogTitle": "AI Scene Generator",
+  "AISCENEGEN.ButtonLabel": "AI Scene",
+  "AISCENEGEN.OpenDialog": "Open AI Scene Generator",
+
+  "AISCENEGEN.PromptLabel": "Image Prompt",
+  "AISCENEGEN.PromptPlaceholder": "Describe the scene you want to generate, e.g. 'A dark dungeon with glowing runes carved into stone walls, torchlight, misty atmosphere'",
+  "AISCENEGEN.StyleLabel": "Art Style",
+  "AISCENEGEN.SceneNameLabel": "Scene Name",
+  "AISCENEGEN.SceneNamePlaceholder": "Leave empty for automatic name",
+  "AISCENEGEN.PreviewLabel": "Preview",
+  "AISCENEGEN.FullPromptLabel": "Full prompt sent to API",
+
+  "AISCENEGEN.Generate": "Generate Image",
+  "AISCENEGEN.Regenerate": "Regenerate",
+  "AISCENEGEN.CreateScene": "Create Scene",
+  "AISCENEGEN.DefaultSceneName": "AI Generated Scene",
+
+  "AISCENEGEN.Style.None": "No Style",
+  "AISCENEGEN.Style.DnDFantasy": "D&D Fantasy",
+  "AISCENEGEN.Style.Comic": "Comic",
+  "AISCENEGEN.Style.Realistic": "Realistic",
+  "AISCENEGEN.Style.VideoGame": "Video Game",
+  "AISCENEGEN.Style.Artistic": "Artistic",
+  "AISCENEGEN.Style.DarkHorror": "Dark Horror",
+  "AISCENEGEN.Style.Watercolor": "Watercolor",
+  "AISCENEGEN.Style.SciFi": "Sci-Fi",
+
+  "AISCENEGEN.Status.Generating": "Generating image…",
+  "AISCENEGEN.Status.Done": "Image ready!",
+  "AISCENEGEN.Status.CreatingScene": "Creating scene…",
+  "AISCENEGEN.Status.SceneCreated": "Scene '{name}' created!",
+
+  "AISCENEGEN.Error.NoApiKey": "No API key configured. Please set one in Module Settings.",
+  "AISCENEGEN.Error.EmptyPrompt": "Please enter a prompt before generating.",
+  "AISCENEGEN.Error.GenerationFailed": "Image generation failed",
+  "AISCENEGEN.Error.SceneFailed": "Scene creation failed",
+
+  "AISCENEGEN.Settings.ApiProvider": "Image API Provider",
+  "AISCENEGEN.Settings.ApiProviderHint": "Choose which AI image generation service to use.",
+  "AISCENEGEN.Settings.ApiKey": "API Key",
+  "AISCENEGEN.Settings.ApiKeyHint": "Your secret API key for the selected provider.",
+  "AISCENEGEN.Settings.ReplicateModel": "Replicate Model",
+  "AISCENEGEN.Settings.ReplicateModelHint": "Replicate model path, e.g. black-forest-labs/flux-schnell",
+  "AISCENEGEN.Settings.ImageSize": "Image Size",
+  "AISCENEGEN.Settings.ImageSizeHint": "Resolution of the generated image (DALL-E 3 only).",
+  "AISCENEGEN.Settings.UploadFolder": "Upload Folder",
+  "AISCENEGEN.Settings.UploadFolderHint": "Folder inside your Foundry user data where generated images are saved."
+}

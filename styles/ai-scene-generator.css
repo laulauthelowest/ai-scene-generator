@@ -1,0 +1,265 @@
+/* ─── AI Scene Generator – Stylesheet ───────────────────────────────────── */
+
+:root {
+  --aisg-accent: #7c5cbf;
+  --aisg-accent-hover: #9b7ce0;
+  --aisg-accent-active: #5e3fa3;
+  --aisg-bg: #1a1a2e;
+  --aisg-surface: #16213e;
+  --aisg-border: rgba(124, 92, 191, 0.3);
+  --aisg-text: #e0d7f5;
+  --aisg-text-muted: #8a82a0;
+  --aisg-success: #4caf82;
+  --aisg-radius: 8px;
+}
+
+/* Dialog wrapper */
+#ai-scene-generator-dialog .window-content {
+  padding: 0;
+  background: var(--aisg-bg);
+  color: var(--aisg-text);
+}
+
+.ai-scene-generator-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+/* Sections */
+.ai-scene-generator-wrapper .section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.section-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--aisg-accent-hover);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Prompt textarea */
+.prompt-input {
+  background: var(--aisg-surface);
+  border: 1px solid var(--aisg-border);
+  border-radius: var(--aisg-radius);
+  color: var(--aisg-text);
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  resize: vertical;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.prompt-input:focus {
+  outline: none;
+  border-color: var(--aisg-accent);
+  box-shadow: 0 0 0 2px rgba(124, 92, 191, 0.2);
+}
+
+.prompt-input::placeholder {
+  color: var(--aisg-text-muted);
+}
+
+/* Style grid */
+.style-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.style-btn {
+  background: var(--aisg-surface);
+  border: 1px solid var(--aisg-border);
+  border-radius: var(--aisg-radius);
+  color: var(--aisg-text-muted);
+  padding: 10px 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.style-btn i {
+  font-size: 1.2rem;
+}
+
+.style-btn:hover {
+  border-color: var(--aisg-accent);
+  color: var(--aisg-text);
+  background: rgba(124, 92, 191, 0.12);
+  transform: translateY(-1px);
+}
+
+.style-btn.active {
+  border-color: var(--aisg-accent);
+  background: rgba(124, 92, 191, 0.25);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(124, 92, 191, 0.35);
+}
+
+/* Scene name input */
+.scene-name-input {
+  background: var(--aisg-surface);
+  border: 1px solid var(--aisg-border);
+  border-radius: var(--aisg-radius);
+  color: var(--aisg-text);
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.scene-name-input:focus {
+  outline: none;
+  border-color: var(--aisg-accent);
+}
+
+.scene-name-input::placeholder {
+  color: var(--aisg-text-muted);
+}
+
+/* Action buttons */
+.actions-section {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-generate,
+.btn-create-scene,
+.btn-regenerate {
+  background: var(--aisg-accent);
+  border: none;
+  border-radius: var(--aisg-radius);
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: background 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.btn-generate:hover,
+.btn-create-scene:hover,
+.btn-regenerate:hover {
+  background: var(--aisg-accent-hover);
+  transform: translateY(-1px);
+}
+
+.btn-generate:active,
+.btn-create-scene:active,
+.btn-regenerate:active {
+  background: var(--aisg-accent-active);
+  transform: translateY(0);
+}
+
+.btn-generate:disabled,
+.btn-create-scene:disabled,
+.btn-regenerate:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-create-scene {
+  background: var(--aisg-success);
+}
+
+.btn-create-scene:hover {
+  background: #5dc99a;
+}
+
+.generate-status {
+  font-size: 0.82rem;
+  color: var(--aisg-text-muted);
+  font-style: italic;
+}
+
+.spinner {
+  color: var(--aisg-accent-hover);
+  font-size: 1.1rem;
+}
+
+/* Preview */
+.preview-container {
+  border: 1px solid var(--aisg-border);
+  border-radius: var(--aisg-radius);
+  overflow: hidden;
+  background: #000;
+  line-height: 0;
+}
+
+.preview-img {
+  width: 100%;
+  height: auto;
+  max-height: 320px;
+  object-fit: contain;
+  display: block;
+}
+
+.preview-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.prompt-details {
+  font-size: 0.8rem;
+  color: var(--aisg-text-muted);
+}
+
+.prompt-details summary {
+  cursor: pointer;
+  color: var(--aisg-accent-hover);
+  user-select: none;
+}
+
+.full-prompt-display {
+  margin: 6px 0 0;
+  padding: 8px;
+  background: var(--aisg-surface);
+  border-radius: 4px;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--aisg-text-muted);
+  word-break: break-word;
+}
+
+/* Scene directory button */
+.ai-scene-gen-btn {
+  background: var(--aisg-accent);
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.15s;
+  white-space: nowrap;
+  margin-left: 4px;
+}
+
+.ai-scene-gen-btn:hover {
+  background: var(--aisg-accent-hover);
+}

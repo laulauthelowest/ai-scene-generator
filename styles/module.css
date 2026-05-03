@@ -1,0 +1,239 @@
+/* AI Scene Generator - Module Styles */
+
+/* ── Dialog container ──────────────────────────────────────────── */
+#ai-scene-generator-dialog .window-content {
+  padding: 0;
+  background: #1a1a2e;
+  color: #e8e0d5;
+  font-family: "Signika", serif;
+}
+
+.asg-container {
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Warning banner ────────────────────────────────────────────── */
+.asg-warning {
+  background: rgba(220, 90, 30, 0.2);
+  border: 1px solid rgba(220, 90, 30, 0.5);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f4a460;
+}
+
+.asg-warning a {
+  color: #f4a460;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ── Fields ────────────────────────────────────────────────────── */
+.asg-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.asg-field label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #a89880;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.asg-field label i {
+  color: #c8a96e;
+}
+
+.char-count {
+  font-size: 0.72rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: #6a6055;
+  margin-left: auto;
+}
+
+.asg-field input[type="text"],
+.asg-field textarea {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(200, 169, 110, 0.25);
+  border-radius: 6px;
+  color: #e8e0d5;
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  resize: vertical;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.asg-field input[type="text"]:focus,
+.asg-field textarea:focus {
+  outline: none;
+  border-color: rgba(200, 169, 110, 0.6);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.asg-field input::placeholder,
+.asg-field textarea::placeholder {
+  color: #5a5045;
+}
+
+/* ── Style grid ────────────────────────────────────────────────── */
+.asg-style-select-hidden {
+  display: none !important;
+}
+
+.asg-style-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.asg-style-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(200, 169, 110, 0.2);
+  border-radius: 8px;
+  padding: 10px 6px 8px;
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s;
+  font-size: 0.75rem;
+  color: #a89880;
+}
+
+.asg-style-card i {
+  font-size: 1.1rem;
+  color: #8a7860;
+}
+
+.asg-style-card:hover {
+  background: rgba(200, 169, 110, 0.1);
+  border-color: rgba(200, 169, 110, 0.4);
+  color: #e8e0d5;
+}
+
+.asg-style-card:hover i {
+  color: #c8a96e;
+}
+
+.asg-style-card.selected {
+  background: rgba(200, 169, 110, 0.18);
+  border-color: #c8a96e;
+  color: #e8e0d5;
+  box-shadow: 0 0 10px rgba(200, 169, 110, 0.2);
+}
+
+.asg-style-card.selected i {
+  color: #c8a96e;
+}
+
+/* ── Provider badge ────────────────────────────────────────────── */
+.asg-provider-badge {
+  font-size: 0.78rem;
+  color: #6a6055;
+  text-align: right;
+  padding-right: 2px;
+}
+
+.asg-provider-badge strong {
+  color: #a89880;
+}
+
+.asg-provider-badge i {
+  color: #c8a96e;
+  margin-right: 4px;
+}
+
+/* ── Generate button ───────────────────────────────────────────── */
+.asg-actions {
+  padding-top: 2px;
+}
+
+.asg-generate-btn {
+  width: 100%;
+  padding: 11px 16px;
+  background: linear-gradient(135deg, #7a4f1e 0%, #c8a96e 50%, #7a4f1e 100%);
+  background-size: 200% 100%;
+  background-position: right center;
+  border: 1px solid rgba(200, 169, 110, 0.6);
+  border-radius: 8px;
+  color: #1a1a2e;
+  font-size: 0.92rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.asg-generate-btn:hover:not(:disabled) {
+  background-position: left center;
+  box-shadow: 0 0 18px rgba(200, 169, 110, 0.35);
+  transform: translateY(-1px);
+}
+
+.asg-generate-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Spinner ────────────────────────────────────────────────────── */
+.asg-spinner {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ── Sidebar button ─────────────────────────────────────────────── */
+.ai-scene-btn {
+  width: 100%;
+  margin-bottom: 4px;
+  background: rgba(200, 169, 110, 0.15);
+  border: 1px solid rgba(200, 169, 110, 0.35);
+  border-radius: 4px;
+  color: #c8a96e;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.ai-scene-btn:hover {
+  background: rgba(200, 169, 110, 0.25);
+  border-color: rgba(200, 169, 110, 0.6);
+}
+
+/* ── Title bar styling ──────────────────────────────────────────── */
+#ai-scene-generator-dialog .window-header {
+  background: linear-gradient(90deg, #0d0d1a 0%, #1a1a2e 100%);
+  border-bottom: 1px solid rgba(200, 169, 110, 0.3);
+}
+
+#ai-scene-generator-dialog .window-title {
+  color: #c8a96e;
+}
