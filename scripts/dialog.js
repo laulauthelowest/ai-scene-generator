@@ -66,10 +66,10 @@ export class AISceneGeneratorDialog extends Application {
 
   // Convenience: querySelector on this dialog's root element
   _q(selector) {
-    return this.element.querySelector(selector);
+    return this.element[0].querySelector(selector);
   }
   _qAll(selector) {
-    return this.element.querySelectorAll(selector);
+    return this.element[0].querySelectorAll(selector);
   }
 
   activateListeners(html) {
