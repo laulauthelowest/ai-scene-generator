@@ -190,32 +190,25 @@ export class AISceneGeneratorDialog extends HandlebarsApplicationMixin(Applicati
   async #makeScene(name, imagePath) {
     console.log(`${MODULE_ID} | Creating scene "${name}" with image: ${imagePath}`);
 
-    // Create scene first without background
+    // In Foundry V14, the background image lives inside the levels array:
+    // levels[0].background.src  (not scene.background.src)
+    // We set it directly on the default level during create.
     const scene = await Scene.create({
       name,
       width:   1920,
       height:  1080,
       padding: 0,
       grid: { type: 1, size: 100 },
+      levels: [{
+        _id:    "defaultLevel0000",
+        name:   "Level",
+        elevation: { bottom: 0, top: 20 },
+        background: { src: imagePath },
+      }],
     });
 
-    // Log the full raw schema so we can see exactly what fields V14 uses
-    const raw = scene.toObject();
-    console.log(`${MODULE_ID} | Raw scene schema keys:`, Object.keys(raw));
-    console.log(`${MODULE_ID} | Raw scene.background:`, JSON.stringify(raw.background));
-    console.log(`${MODULE_ID} | Raw scene.environment:`, JSON.stringify(raw.environment));
-
-    // Attempt 1: nested object (the schema field, not the deprecated getter)
-    await scene.update({ background: { src: imagePath } });
-    const raw2 = scene.toObject();
-    console.log(`${MODULE_ID} | After background:{src} update → background.src =`, raw2?.background?.src);
-
-    if (raw2?.background?.src !== imagePath) {
-      // Attempt 2: flat dot-notation
-      await scene.update({ "background.src": imagePath });
-      const raw3 = scene.toObject();
-      console.log(`${MODULE_ID} | After "background.src" update → background.src =`, raw3?.background?.src);
-    }
+    console.log(`${MODULE_ID} | Scene created. levels[0].background.src =`,
+      scene.toObject()?.levels?.[0]?.background?.src);
 
     scene.sheet.render(true);
     return scene;
