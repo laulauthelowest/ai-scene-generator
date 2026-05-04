@@ -84,7 +84,7 @@
 
 .style-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 7px;
 }
 
@@ -93,19 +93,19 @@
   border:        1px solid var(--aisg-border);
   border-radius: var(--aisg-radius);
   color:         var(--aisg-muted);
-  padding:       9px 6px;
+  padding:       12px 8px;
   cursor:        pointer;
   display:       flex;
   flex-direction: column;
   align-items:   center;
   gap:           5px;
-  font-size:     0.76rem;
+  font-size:     0.82rem;
   font-family:   inherit;
   text-align:    center;
   transition:    all 0.15s ease;
   line-height:   1.2;
 }
-.style-btn i { font-size: 1.1rem; }
+.style-btn i { font-size: 1.3rem; }
 .style-btn:hover {
   border-color: var(--aisg-accent);
   color:        var(--aisg-text);
