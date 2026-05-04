@@ -184,8 +184,12 @@ export class AISceneGeneratorDialog extends Application {
 
   async _uploadImage(dataUrl, filename) {
     const folder = AISceneGeneratorSettings.get("uploadFolder") || "ai-generated-scenes";
+
+    // Use V14 namespaced FilePicker, fall back to global for older versions
+    const FP = foundry.applications?.apps?.FilePicker?.implementation ?? FilePicker;
+
     try {
-      await FilePicker.createDirectory("data", folder);
+      await FP.createDirectory("data", folder);
     } catch (_e) {
       // Folder likely already exists
     }
@@ -194,33 +198,29 @@ export class AISceneGeneratorDialog extends Application {
     const blob = await res.blob();
     const file = new File([blob], filename, { type: "image/png" });
 
-    const uploadResult = await FilePicker.upload("data", folder, file, {});
+    const uploadResult = await FP.upload("data", folder, file, {});
     if (!uploadResult?.path) throw new Error("Upload failed – no path returned.");
-
-    // Foundry sometimes returns a relative path like "ai-generated-scenes/foo.png"
-    // We need to ensure it's usable as a scene background src.
     return uploadResult.path;
   }
 
   async _createScene(name, backgroundPath) {
     console.log(`${MODULE_ID} | Creating scene "${name}" with background: ${backgroundPath}`);
 
+    // Foundry V14 uses levels-based background via "environment.backgroundWeather" 
+    // but Scene still accepts "background.src" as the correct data path.
+    // We create the scene then explicitly update to ensure the value sticks.
     const scene = await Scene.create({
       name,
-      // Try both the nested and flat background format for compatibility
-      background: { src: backgroundPath },
-      foreground: null,
       width: 1920,
       height: 1080,
       grid: { type: 1, size: 100 },
       padding: 0,
     });
 
-    // Explicitly update the background after creation as a fallback
-    if (!scene.background?.src) {
-      await scene.update({ "background.src": backgroundPath });
-    }
+    // Set background via update — more reliable than passing it in create()
+    await scene.update({ "background.src": backgroundPath });
 
+    console.log(`${MODULE_ID} | Scene background set to: ${scene.background?.src ?? "(check manually)"}`);
     scene.sheet.render(true);
     return scene;
   }
