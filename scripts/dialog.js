@@ -100,8 +100,10 @@ export class AISceneGeneratorDialog extends HandlebarsApplicationMixin(Applicati
       return;
     }
 
+    const change     = this.#q(".change-input")?.value.trim() ?? "";
     const suffix     = STYLE_PROMPTS[this.#selectedStyle] ?? "";
-    const fullPrompt = suffix ? `${prompt}, ${suffix}` : prompt;
+    const parts      = [prompt, change, suffix].filter(Boolean);
+    const fullPrompt = parts.join(", ");
 
     this.#isGenerating = true;
     this.#setGeneratingState(true);
@@ -120,6 +122,9 @@ export class AISceneGeneratorDialog extends HandlebarsApplicationMixin(Applicati
       this.#q(".btn-create-scene").disabled      = false;
       this.#q(".btn-regenerate").disabled        = false;
       this.#q(".full-prompt-display").textContent = fullPrompt;
+      // Clear the change field after each generation
+      const changeEl = this.#q(".change-input");
+      if (changeEl) changeEl.value = "";
     } catch (err) {
       console.error(`${MODULE_ID} | Generation error:`, err);
       ui.notifications.error(`${game.i18n.localize("AISCENEGEN.Error.GenerationFailed")}: ${err.message}`);
@@ -198,12 +203,12 @@ export class AISceneGeneratorDialog extends HandlebarsApplicationMixin(Applicati
       width:   1920,
       height:  1080,
       padding: 0,
-      grid: { type: 1, size: 100 },
+      grid: { type: 0, size: 100 },   // type 0 = no grid
       levels: [{
-        _id:    "defaultLevel0000",
-        name:   "Level",
+        _id:       "defaultLevel0000",
+        name:      "Level",
         elevation: { bottom: 0, top: 20 },
-        background: { src: imagePath },
+        background: { src: imagePath, color: "#000000" },
       }],
     });
 
