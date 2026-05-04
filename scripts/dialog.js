@@ -31,7 +31,9 @@ const STYLE_PROMPTS = {
   "sci-fi":      "futuristic sci-fi concept art, neon accents, technology, cinematic, detailed digital art",
 };
 
-export class AISceneGeneratorDialog extends Application {
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+
+export class AISceneGeneratorDialog extends HandlebarsApplicationMixin(ApplicationV2) {
   constructor(options = {}) {
     super(options);
     this._selectedStyle = "";
@@ -40,19 +42,23 @@ export class AISceneGeneratorDialog extends Application {
     this._pendingFilename = null;
   }
 
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      id: "ai-scene-generator-dialog",
-      title: game.i18n.localize("AISCENEGEN.DialogTitle"),
-      template: `modules/${MODULE_ID}/templates/dialog.hbs`,
-      width: 640,
-      height: "auto",
+  static DEFAULT_OPTIONS = {
+    id: "ai-scene-generator-dialog",
+    window: {
+      title: "AISCENEGEN.DialogTitle",
       resizable: true,
-      classes: ["ai-scene-generator", "dialog"],
-    });
-  }
+    },
+    position: { width: 640, height: "auto" },
+    classes: ["ai-scene-generator"],
+  };
 
-  getData() {
+  static PARTS = {
+    main: {
+      template: `modules/${MODULE_ID}/templates/dialog.hbs`,
+    },
+  };
+
+  async _prepareContext() {
     return {
       styles: STYLES.map((s) => ({
         ...s,
@@ -66,14 +72,14 @@ export class AISceneGeneratorDialog extends Application {
 
   // Convenience: querySelector on this dialog's root element
   _q(selector) {
-    return this.element[0].querySelector(selector);
+    return this.element.querySelector(selector);
   }
   _qAll(selector) {
-    return this.element[0].querySelectorAll(selector);
+    return this.element.querySelectorAll(selector);
   }
 
-  activateListeners(html) {
-    super.activateListeners(html);
+  _onRender(context, options) {
+    super._onRender(context, options);
 
     // Style buttons
     this._qAll(".style-btn").forEach((btn) => {
@@ -206,21 +212,32 @@ export class AISceneGeneratorDialog extends Application {
   async _createScene(name, backgroundPath) {
     console.log(`${MODULE_ID} | Creating scene "${name}" with background: ${backgroundPath}`);
 
-    // Foundry V14 uses levels-based background via "environment.backgroundWeather" 
-    // but Scene still accepts "background.src" as the correct data path.
-    // We create the scene then explicitly update to ensure the value sticks.
-    const scene = await Scene.create({
+    // In Foundry V14 the scene data schema changed.
+    // The correct field is still "background.src" in the data model,
+    // but we must pass it as a flat dot-notation key in the create/update payload,
+    // NOT as a nested object (which triggers the deprecated getter).
+    const createData = {
       name,
       width: 1920,
       height: 1080,
       grid: { type: 1, size: 100 },
       padding: 0,
-    });
+    };
+    // Use dot-notation key to bypass the deprecated background getter
+    createData["background.src"] = backgroundPath;
 
-    // Set background via update — more reliable than passing it in create()
-    await scene.update({ "background.src": backgroundPath });
+    const scene = await Scene.create(createData);
 
-    console.log(`${MODULE_ID} | Scene background set to: ${scene.background?.src ?? "(check manually)"}`);
+    // Verify via the raw data, not the deprecated getter
+    const storedSrc = scene._source?.background?.src ?? scene.toObject()?.background?.src;
+    console.log(`${MODULE_ID} | Scene background stored as: ${storedSrc ?? "(not found in _source)"}`);
+
+    // If still not set, force it via update with dot-notation
+    if (!storedSrc) {
+      console.warn(`${MODULE_ID} | Background not set after create, retrying via update...`);
+      await scene.update({ "background.src": backgroundPath });
+    }
+
     scene.sheet.render(true);
     return scene;
   }
