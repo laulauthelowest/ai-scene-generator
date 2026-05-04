@@ -35,14 +35,11 @@ const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
 export class AISceneGeneratorDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
-  // ── Static config ─────────────────────────────────────────────────────────
-
   static DEFAULT_OPTIONS = {
     id: "ai-scene-generator-dialog",
     window: {
       title: "AISCENEGEN.DialogTitle",
       resizable: true,
-      contentClasses: ["ai-scene-generator-content"],
     },
     position: { width: 660, height: 600 },
     classes: ["ai-scene-generator"],
@@ -51,18 +48,14 @@ export class AISceneGeneratorDialog extends HandlebarsApplicationMixin(Applicati
   static PARTS = {
     main: {
       template: `modules/${MODULE_ID}/templates/dialog.hbs`,
-      scrollable: [".ai-scene-generator-content"],
+      scrollable: [""],
     },
   };
 
-  // ── Instance state ────────────────────────────────────────────────────────
-
-  #selectedStyle = "";
-  #isGenerating  = false;
-  #previewUrl    = null;
+  #selectedStyle   = "";
+  #isGenerating    = false;
+  #previewUrl      = null;
   #pendingFilename = null;
-
-  // ── Data ──────────────────────────────────────────────────────────────────
 
   async _prepareContext(_options) {
     return {
@@ -74,15 +67,10 @@ export class AISceneGeneratorDialog extends HandlebarsApplicationMixin(Applicati
     };
   }
 
-  // ── DOM helpers ───────────────────────────────────────────────────────────
-
   #q(sel)    { return this.element.querySelector(sel); }
   #qAll(sel) { return this.element.querySelectorAll(sel); }
 
-  // ── Render hook ───────────────────────────────────────────────────────────
-
   _onRender(_ctx, _opts) {
-    // Style toggle
     this.#qAll(".style-btn").forEach((btn) =>
       btn.addEventListener("click", (e) => {
         this.#selectedStyle = e.currentTarget.dataset.style ?? "";
@@ -91,20 +79,17 @@ export class AISceneGeneratorDialog extends HandlebarsApplicationMixin(Applicati
       })
     );
 
-    this.#q(".btn-generate").addEventListener("click",      () => this.#generate());
-    this.#q(".btn-create-scene").addEventListener("click",  () => this.#createScene());
-    this.#q(".btn-regenerate").addEventListener("click",    () => this.#generate());
+    this.#q(".btn-generate").addEventListener("click",     () => this.#generate());
+    this.#q(".btn-create-scene").addEventListener("click", () => this.#createScene());
+    this.#q(".btn-regenerate").addEventListener("click",   () => this.#generate());
 
-    // Restore preview if dialog was re-rendered
     if (this.#previewUrl) {
       this.#q(".preview-section").style.display = "";
-      this.#q(".preview-img").src = this.#previewUrl;
-      this.#q(".btn-create-scene").disabled = false;
-      this.#q(".btn-regenerate").disabled   = false;
+      this.#q(".preview-img").src               = this.#previewUrl;
+      this.#q(".btn-create-scene").disabled     = false;
+      this.#q(".btn-regenerate").disabled       = false;
     }
   }
-
-  // ── Generate ──────────────────────────────────────────────────────────────
 
   async #generate() {
     if (this.#isGenerating) return;
@@ -115,7 +100,7 @@ export class AISceneGeneratorDialog extends HandlebarsApplicationMixin(Applicati
       return;
     }
 
-    const suffix    = STYLE_PROMPTS[this.#selectedStyle] ?? "";
+    const suffix     = STYLE_PROMPTS[this.#selectedStyle] ?? "";
     const fullPrompt = suffix ? `${prompt}, ${suffix}` : prompt;
 
     this.#isGenerating = true;
@@ -125,21 +110,19 @@ export class AISceneGeneratorDialog extends HandlebarsApplicationMixin(Applicati
     status.textContent = game.i18n.localize("AISCENEGEN.Status.Generating");
 
     try {
-      const result = await AIImageClient.generate(fullPrompt);
-      this.#previewUrl       = result.dataUrl;
-      this.#pendingFilename  = result.filename;
+      const result          = await AIImageClient.generate(fullPrompt);
+      this.#previewUrl      = result.dataUrl;
+      this.#pendingFilename = result.filename;
 
       status.textContent = game.i18n.localize("AISCENEGEN.Status.Done");
-      this.#q(".preview-section").style.display = "";
-      this.#q(".preview-img").src               = result.dataUrl;
+      this.#q(".preview-section").style.display  = "";
+      this.#q(".preview-img").src                = result.dataUrl;
       this.#q(".btn-create-scene").disabled      = false;
       this.#q(".btn-regenerate").disabled        = false;
       this.#q(".full-prompt-display").textContent = fullPrompt;
     } catch (err) {
       console.error(`${MODULE_ID} | Generation error:`, err);
-      ui.notifications.error(
-        `${game.i18n.localize("AISCENEGEN.Error.GenerationFailed")}: ${err.message}`
-      );
+      ui.notifications.error(`${game.i18n.localize("AISCENEGEN.Error.GenerationFailed")}: ${err.message}`);
       status.textContent = "";
     } finally {
       this.#isGenerating = false;
@@ -150,7 +133,7 @@ export class AISceneGeneratorDialog extends HandlebarsApplicationMixin(Applicati
   #setGeneratingState(on) {
     const btn     = this.#q(".btn-generate");
     const spinner = this.#q(".spinner");
-    btn.disabled           = on;
+    btn.disabled  = on;
     btn.querySelector("span").textContent = game.i18n.localize(
       on ? "AISCENEGEN.Status.Generating" : "AISCENEGEN.Generate"
     );
@@ -160,8 +143,6 @@ export class AISceneGeneratorDialog extends HandlebarsApplicationMixin(Applicati
       this.#q(".btn-regenerate").disabled   = true;
     }
   }
-
-  // ── Create scene ──────────────────────────────────────────────────────────
 
   async #createScene() {
     if (!this.#previewUrl) return;
@@ -175,33 +156,26 @@ export class AISceneGeneratorDialog extends HandlebarsApplicationMixin(Applicati
     const filename = `${safeName}_${Date.now()}.png`;
 
     const btn = this.#q(".btn-create-scene");
-    btn.disabled     = true;
-    btn.textContent  = game.i18n.localize("AISCENEGEN.Status.CreatingScene");
+    btn.disabled    = true;
+    btn.textContent = game.i18n.localize("AISCENEGEN.Status.CreatingScene");
 
     try {
       const imagePath = await this.#upload(this.#previewUrl, filename);
       console.log(`${MODULE_ID} | Uploaded to: ${imagePath}`);
-
       await this.#makeScene(sceneName, imagePath);
-      ui.notifications.info(
-        game.i18n.format("AISCENEGEN.Status.SceneCreated", { name: sceneName })
-      );
+      ui.notifications.info(game.i18n.format("AISCENEGEN.Status.SceneCreated", { name: sceneName }));
       this.close();
     } catch (err) {
       console.error(`${MODULE_ID} | Scene creation error:`, err);
-      ui.notifications.error(
-        `${game.i18n.localize("AISCENEGEN.Error.SceneFailed")}: ${err.message}`
-      );
+      ui.notifications.error(`${game.i18n.localize("AISCENEGEN.Error.SceneFailed")}: ${err.message}`);
       btn.disabled    = false;
       btn.textContent = game.i18n.localize("AISCENEGEN.CreateScene");
     }
   }
 
-  // ── Upload ────────────────────────────────────────────────────────────────
-
   async #upload(dataUrl, filename) {
     const folder = AISceneGeneratorSettings.get("uploadFolder") || "ai-generated-scenes";
-    const FP = foundry.applications?.apps?.FilePicker?.implementation ?? FilePicker;
+    const FP     = foundry.applications?.apps?.FilePicker?.implementation ?? FilePicker;
 
     try { await FP.createDirectory("data", folder); } catch (_e) { /* already exists */ }
 
@@ -213,38 +187,34 @@ export class AISceneGeneratorDialog extends HandlebarsApplicationMixin(Applicati
     return result.path;
   }
 
-  // ── Make scene ────────────────────────────────────────────────────────────
-
   async #makeScene(name, imagePath) {
-    // In Foundry V14 the Scene document still stores the background image
-    // under the "background.src" data path, but Scene#background (the getter)
-    // is deprecated. We bypass it entirely and work with toObject() / _source.
-    //
-    // The safest approach: create the scene with the nested object directly
-    // in the raw data (not through the deprecated getter), then verify.
+    console.log(`${MODULE_ID} | Creating scene "${name}" with image: ${imagePath}`);
 
+    // Create scene first without background
     const scene = await Scene.create({
       name,
       width:   1920,
       height:  1080,
       padding: 0,
       grid: { type: 1, size: 100 },
-      // Pass as nested object – this writes to the data model directly.
-      // The deprecated warning comes from the *getter*, not from setting the data.
-      background: { src: imagePath },
     });
 
-    // Read back through _source to avoid the deprecated getter
-    const stored = scene._source?.background?.src;
-    console.log(`${MODULE_ID} | Scene created. background._source.src = "${stored}"`);
+    // Log the full raw schema so we can see exactly what fields V14 uses
+    const raw = scene.toObject();
+    console.log(`${MODULE_ID} | Raw scene schema keys:`, Object.keys(raw));
+    console.log(`${MODULE_ID} | Raw scene.background:`, JSON.stringify(raw.background));
+    console.log(`${MODULE_ID} | Raw scene.environment:`, JSON.stringify(raw.environment));
 
-    if (!stored || stored !== imagePath) {
-      // Fallback: use the underlying document update bypassing the getter
-      console.warn(`${MODULE_ID} | Path mismatch, forcing raw update...`);
-      await Scene.implementation.updateDocuments(
-        [{ _id: scene.id, background: { src: imagePath } }],
-        { parent: null }
-      );
+    // Attempt 1: nested object (the schema field, not the deprecated getter)
+    await scene.update({ background: { src: imagePath } });
+    const raw2 = scene.toObject();
+    console.log(`${MODULE_ID} | After background:{src} update → background.src =`, raw2?.background?.src);
+
+    if (raw2?.background?.src !== imagePath) {
+      // Attempt 2: flat dot-notation
+      await scene.update({ "background.src": imagePath });
+      const raw3 = scene.toObject();
+      console.log(`${MODULE_ID} | After "background.src" update → background.src =`, raw3?.background?.src);
     }
 
     scene.sheet.render(true);
